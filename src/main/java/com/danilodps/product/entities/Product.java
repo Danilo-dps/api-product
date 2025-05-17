@@ -1,26 +1,28 @@
 package com.danilodps.product.entities;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Objects;
-import java.util.UUID;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
+import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.UUID;
+
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "tb_produtos")
 public class Product implements Serializable {
-	private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 1L;
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "UUID")
     private UUID idProduct;
@@ -34,61 +36,16 @@ public class Product implements Serializable {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-	public Product() {
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Product)) return false;
+        Product product = (Product) o;
+        return idProduct != null && idProduct.equals(product.idProduct);
+    }
 
-	public Product(UUID idProduct, String productName, BigDecimal price) {
-		this.idProduct = idProduct;
-		this.productName = productName;
-		this.price = price;
-	}
-
-	public UUID getIdProduct() {
-		return idProduct;
-	}
-
-	public void setIdProduct(UUID idProduct) {
-		this.idProduct = idProduct;
-	}
-
-	public String getProductName() {
-		return productName;
-	}
-
-	public void setProductName(String productName) {
-		this.productName = productName;
-	}
-
-	public BigDecimal getPrice() {
-		return price;
-	}
-
-	public void setPrice(BigDecimal price) {
-		this.price = price;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(idProduct);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Product other = (Product) obj;
-		return Objects.equals(idProduct, other.idProduct);
-	}
-
-	@Override
-	public String toString() {
-		return "Produto " 
-				+ "Id do produto: " + getIdProduct() 
-				+ ", Nome do produto: " + getProductName() 
-			    + ", Preço: " + getPrice();
-	}
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
